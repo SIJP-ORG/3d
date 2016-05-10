@@ -96,7 +96,7 @@ module plate1(m, w, h)
     }
 }
 
-module pin(num,w,h,t,m)
+module pin(num, w, h, t, m)
 {
     if (num == 1)  pin1 (w, h, t, m);
     if (num == 2)  pin2 (w, h, t, m);
@@ -115,7 +115,7 @@ module pin16(w, h, t, m)
     {
         for (iy = [0:3]) 
         {
-            //color([1,0.5,0.5])
+            //color([1, 0.5, 0.5])
             translate([cx-9+6*ix, cy+6*iy, 1])  cylinder(r = 2, h = ot);
         }
     }
@@ -131,7 +131,7 @@ module pin8(w, h, t, m)
     {
         for (iy = [0:3]) 
         {
-            //color([1,0.5,0.5])
+            //color([1, 0.5, 0.5])
             translate([cx-9+6*ix+6, cy+6*iy, 1])  cylinder(r = 2, h = ot);
         }
     }
@@ -147,7 +147,7 @@ module pin4(w, h, t, m)
     {
         for (iy = [0:1]) 
         {
-            //color([1,0.5,0.5])
+            //color([1, 0.5, 0.5])
             translate([cx-9+6*ix+6, cy+6*iy+6, 1])  cylinder(r = 2, h = ot);
         }
     }
@@ -161,7 +161,7 @@ module pin2(w, h, t, m)
     ot = 1;
     for (iy = [0:1]) 
     {
-        //color([1,0.5,0.5])
+        //color([1, 0.5, 0.5])
         translate([cx-9+9, cy+6*iy+6, 1])  cylinder(r = 2, h = ot);
     }
 }
@@ -172,6 +172,6 @@ module pin1(w, h, t, m)
     cy = h/2;
     oz = 1;
     ot = 1;
-    //color([1,0.5,0.5])
+    //color([1, 0.5, 0.5])
     translate([cx-9+9, cy+6, 1])  cylinder(r = 2, h = ot);
 }
