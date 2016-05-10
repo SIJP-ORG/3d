@@ -12,7 +12,7 @@ card_width  = 30;  // card width (in mm).
 card_height = 50;  // card height (in mm).
 num_x = 5;         // number of cards in X axis.
 num_y = 25;        // number of cards in Y axis.
-side = 0;          // side (1=front, 2=back).
+side = 0;          // side (1=front, 0=back).
 connect = 0;       // connect parts by 1mm-thick lines to reduce printing cost.
 
 binary_number_cards(card_width, card_height, num_x, num_y, side, gap, connect);
