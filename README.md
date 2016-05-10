@@ -1,5 +1,9 @@
-# 3d
-3d stuff
+# 3D印刷
 
-## SIJP Binary Number Card
+* BinaryNumber/ （2進数カード）
+
+## 2進数カード
+
+SIJP Coding Camp Jr. で使っている、子供たちに2進法を教えるためのカードのミニチュア版です。
+
 ![サンプル/sample](BinaryNumber/PrintSample.jpg)
