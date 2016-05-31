@@ -8,15 +8,21 @@
 
 // ----- bulk print (production) -----
 
-gap = 4;           // gap between cards (in mm).
+gap = 5;           // gap between cards (in mm).
 card_width  = 30;  // card width (in mm).
 card_height = 50;  // card height (in mm).
 num_x = 5;         // number of cards in X axis.
-num_y = 25;         // number of cards in Y axis.
-side = 1;          // side (1=front, 0=back).
+num_y = 1;         // number of cards in Y axis.
+side = 0;          // side (1=front, 0=back).
 connect = 0;       // connect parts by 1mm-thick lines to reduce printing cost.
 
-binary_number_cards(card_width, card_height, num_x, num_y, side, gap, connect);
+if (side == 1) {
+    binary_number_cards(card_width, card_height, num_x, num_y, side, gap, connect);
+} else {
+    translate([card_width*num_x+gap*(num_x-1), 2+2*num_y+gap*(num_y-1), 0])
+        rotate([0,0,180])
+            binary_number_cards(card_width, card_height, num_x, num_y, side, gap, connect);
+}
 
 // ----- single print (test print) -----
 
@@ -128,14 +134,21 @@ module plate1(m, w, h) {
                 translate([0,   0,   2]) square(size = [w, 1]);
                 translate([0,   0,   2]) square(size = [1, h]);
                 translate([w-1, 0,   2]) square(size = [1, h]);
-            if (m != 0) {
-                translate([w/2, 5, 2]) 
-                    text(text = "1", font = "Consolas", halign = "center", size = 10);
-                }
-            if (m == 0) {
-                translate([w/2, 5, 3])
-                    text(text = "0", font = "Consolas", halign = "center", size = 10);
             }
+        
+        minkowski(){
+            linear_extrude(height = 1, center = false, convexity = 10,
+                           twist = 0, slices = 20, scale = 1.0) {
+                if (m != 0) {
+                    translate([w/2, 5, 2]) 
+                        text(text = "1", font = "Consolas", halign = "center", size = 10);
+                    }
+                if (m == 0) {
+                    translate([w/2, 5, 3])
+                        text(text = "0", font = "Consolas", halign = "center", size = 10);
+                }
+            }
+            cylinder(h=1.0,r1=0.7,r2=0.2); 
         }
         
         if (m == 0) {
@@ -175,7 +188,14 @@ module pin16(w, h, t, m) {
         for (iy = [0:3]) 
         {
             //color([1, 0.5, 0.5])
-            translate([cx-9+6*ix, cy+6*iy, 1])  cylinder(r = 2, h = ot);
+            minkowski(){
+                linear_extrude(height = 1, center = false, convexity = 10,
+                           twist = 0, slices = 20, scale = 1.0) {
+                    translate([cx-9+6*ix, cy+6*iy, 1])
+                        circle(r = 2, $fn = 16);
+                }
+                cylinder(h=1.0, r1=0.7, r2=0.2); 
+           }
         }
     }
 }
@@ -191,7 +211,14 @@ module pin8(w, h, t, m) {
         for (iy = [0:3]) 
         {
             //color([1, 0.5, 0.5])
-            translate([cx-9+6*ix+6, cy+6*iy, 1])  cylinder(r = 2, h = ot);
+            minkowski(){
+                linear_extrude(height = 1, center = false, convexity = 10,
+                           twist = 0, slices = 20, scale = 1.0) {
+                    translate([cx-9+6*ix+6, cy+6*iy, 1])
+                        circle(r = 2, $fn = 16);
+                }
+                cylinder(h=1.0, r1=0.7, r2=0.2); 
+            }
         }
     }
 }
@@ -207,7 +234,14 @@ module pin4(w, h, t, m) {
         for (iy = [0:1]) 
         {
             //color([1, 0.5, 0.5])
-            translate([cx-9+6*ix+6, cy+6*iy+6, 1])  cylinder(r = 2, h = ot);
+            minkowski(){
+                linear_extrude(height = 1, center = false, convexity = 10,
+                           twist = 0, slices = 20, scale = 1.0) {
+                    translate([cx-9+6*ix+6, cy+6*iy+6, 1])
+                        circle(r = 2, $fn = 16);
+                }
+                cylinder(h=1.0, r1=0.7, r2=0.2); 
+            }
         }
     }
 }
@@ -221,7 +255,14 @@ module pin2(w, h, t, m) {
     for (iy = [0:1]) 
     {
         //color([1, 0.5, 0.5])
-        translate([cx-9+9, cy+6*iy+6, 1])  cylinder(r = 2, h = ot);
+        minkowski(){
+            linear_extrude(height = 1, center = false, convexity = 10,
+                       twist = 0, slices = 20, scale = 1.0) {
+                translate([cx-9+9, cy+6*iy+6, 1])
+                     circle(r = 2, $fn = 16);
+            }
+            cylinder(h=1.0, r1=0.7, r2=0.2); 
+        }
     }
 }
 
@@ -232,5 +273,14 @@ module pin1(w, h, t, m) {
     oz = 1;
     ot = 1;
     //color([1, 0.5, 0.5])
-    translate([cx-9+9, cy+6, 1])  cylinder(r = 2, h = ot);
+
+    minkowski(){
+        linear_extrude(height = 1, center = false, convexity = 10,
+                   twist = 0, slices = 20, scale = 1.0) {
+            translate([cx-9+9, cy+6, 1])
+               circle(r = 2, $fn = 16);
+        }
+        cylinder(h=1.0, r1=0.7, r2=0.2); 
+   }
+    
 }
