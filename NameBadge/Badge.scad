@@ -18,7 +18,6 @@ cy = height / gap_y; // 罫線の本数(Y)
 
 translate([0,0])
     badge_4char("り", "ゅ", "う", "た", 0, -3, 0, 0);
-//badge_3char("わ", "び", "こ", -2, 2);
 translate([110,74])
     badge_2char("ま", "こ");
 translate([0,74])
