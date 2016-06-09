@@ -4,13 +4,13 @@ This card is a miniture version of those bigger cardboard version to teach kids 
 
 ![Sample](PrintSample.jpg)
 
-## Overview
+## Model Overview
 
 This 3D model is designed for dual extrusion.
 You can print both of front and back side at once with printers with dual nozzle.
 You can print with single extrusion printer though by printing both sides seperately and glue them later. 
 
-## Files
+## File List
 
 This repro contains following files. \*.1.stl is front side and \*.0.stl is back side.
 
