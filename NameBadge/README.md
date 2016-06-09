@@ -6,7 +6,7 @@ This is name badge model for SIJP staff and participants used in Coding Camp cla
 
  * STL file for general printing (\*.stl)
  * [OpenSCAD](http://www.openscad.org/) source code (\*.scad) for editing/customization.
-    * [IPAexGothic font](http://ipafont.ipa.go.jp/)IPAexGothic font is required.
+    * [IPAexGothic font](http://ipafont.ipa.go.jp/) is required.
 
 ![Sample](PrintSample.png)
 
