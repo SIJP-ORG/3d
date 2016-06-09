@@ -1,19 +1,22 @@
-# 名札
+# Name Badge
 
-SIJP スタッフ用の名札です。
-以下のファイルを公開しています。
+This is name badge model for SIJP staff and participants used in Coding Camp classes.
 
- * 印刷用STLファイル (*.stl)
- * 編集用の[OpenSCAD](http://www.openscad.org/)ソースコード(*.scad)
-    * [IPAexゴシックフォント](http://ipafont.ipa.go.jp/)IPAexゴシックフォントが必要です。
+## File list
 
-![サンプル/sample](PrintSample.png)
+ * STL file for general printing (\*.stl)
+ * [OpenSCAD](http://www.openscad.org/) source code (\*.scad) for editing/customization.
+    * [IPAexGothic font](http://ipafont.ipa.go.jp/)IPAexGothic font is required.
 
-## 印刷方法
+![Sample](PrintSample.png)
 
-このモデルは一色印刷用です。STLファイルを開いて印刷します。Raft/Support 等は不要です。
+## How to print
 
-## 編集方法
+This model is for single extrusion (single color). 
+Just open the STL file and print it. No raft/support is required.
 
-文字数に応じて 2文字版、3文字版、4文字版の関数が定義されています。
-フォントの文字によって左右方向の位置を微調整したい場合は offsetN (N=1,2,3...) という引数に指定してください。
+## How to customize
+
+Currently there are 3 functions defined such as 2-char, 3-char and 4-char.
+Depending on character, you can fine tune X,Y positions and font size.
+(Please refer to the comments at the beginning of the source file for details.)
