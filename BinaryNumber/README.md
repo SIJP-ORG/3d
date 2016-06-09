@@ -12,7 +12,7 @@ You can print with single extrusion printer though by printing both sides sepera
 
 ## File List
 
-This repro contains following files. \*.1.stl is front side and \*.0.stl is back side.
+This repo contains following files. \*.1.stl is front side and \*.0.stl is back side.
 
 * STL files for printing
   * 1 set (5 cards)
