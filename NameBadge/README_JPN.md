@@ -5,7 +5,7 @@ SIJP スタッフ用の名札です。
 
  * 印刷用STLファイル (*.stl)
  * 編集用の[OpenSCAD](http://www.openscad.org/)ソースコード(*.scad)
-    * [IPAexゴシックフォント](http://ipafont.ipa.go.jp/)IPAexゴシックフォントが必要です。
+    * [IPAexゴシックフォント](http://ipafont.ipa.go.jp/)が必要です。
 
 ![サンプル/sample](PrintSample.png)
 
