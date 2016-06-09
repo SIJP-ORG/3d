@@ -1,37 +1,37 @@
-# 2進数カード
+# Binary Number Card
 
-SIJP Coding Camp Jr. で使っている、子供たちに2進法を教えるためのカードのミニチュア版です。
+This card is a miniture version of those bigger cardboard version to teach kids binary number that is used in SIJP Coding Camp Junior series.
 
-![サンプル/sample](PrintSample.jpg)
+![Sample](PrintSample.jpg)
 
-## 3Dモデルの概要
+## Overview
 
-この3Dモデルは二色印刷に対応しています。
-二色印刷対応のプリンタであれば表と裏を一度に印刷できます。
-一色印刷のプリンタの場合には表と裏を別々に印刷したあと接着剤で貼り付けます。
+This 3D model is designed for dual extrusion.
+You can print both of front and back side at once with printers with dual nozzle.
+You can print with single extrusion printer though by printing both sides seperately and glue them later. 
 
-## 公開しているファイル
+## Files
 
-以下のファイルを公開しています。*.1.stlは表、*.0.stlは裏のモデルです。
+This repro contains following files. \*.1.stl is front side and \*.0.stl is back side.
 
-* 印刷用のSTLファイル
-  * 5枚1セット用
-  * 5枚12セット用
-  * 5枚25セット用
+* STL files for printing
+  * 1 set (5 cards)
+  * 12 sets (60 cards)
+  * 25 sets (125 cards)
 
-* Makerbot Desktop用のthingファイル
-  * 5枚1セット用（2色印刷版）
+* Thing file for Makerbot Desktop
+  * 1 set (5 cards) for dual extrusion
 
-* 編集用の[OpenSCAD](http://www.openscad.org/)ソースコード
+* [OpenSCAD](http://www.openscad.org/) source code for editing
 
-OpenSCADソースコードを使うと、冒頭のパラメータを調整することによりお手元のプリンタの仕様に合わせてカスタマイズできます。
+By using OpenSCAD source code, you can customize various configuration to match your printer.
 
-![おもて/front](BinaryNumberCard1.png)
-![うら/back](BinaryNumberCard0.png)
+![Front side](BinaryNumberCard1.png)
+![Back side](BinaryNumberCard0.png)
 
-## 二色印刷の手順(Makerbot Desktop)
+## How to print with dual extrusion with Makerbot Desktop
 
-* thingファイルを読み込みます。または、
-* 表と裏のSTLファイルを両方とも Makerbot Desktop で読み込みます。裏面のモデルをクリックして Y軸方向に +2mm 移動します。これで表と裏がぴったり接着します。
-* SETTINGS画面で、両方のノズルの温度を適切に設定します。Purge Wall を有効にします。パラメータはデフォルトのままで構いません。
-* PRINTをクリックして印刷開始します。
+* Open the Thing file. Or,
+* Open both of frond side and back side STL files. Click the back side model and move it along Y-axis for 2 mm. This glues both sides perfectly.
+* In SETTINGS, set appropriate temperature for both nozzles. Enable Purge Wall. Everything else can be default values.
+* Click PRINT to start printing.
