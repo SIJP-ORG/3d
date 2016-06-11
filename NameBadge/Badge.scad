@@ -37,17 +37,16 @@ cy = height / gap_y; // 罫線の本数(Y)
 //         where N=1,2,3,4
 //     fontsize = フォントサイズ（推奨値：2文字版と3文字版は30, 4文字版は25）
 
-translate([0,0])
-    badge_2char("や", "す", 0, -2, 0, -2, 30);
-translate([110,74])
-    badge_3char("た", "く", "ほ", 0, 1, 0, 1, 0, 1, 30);
-translate([0,74])
-    badge_4char("り", "ゅ", "う", "た", -3, 0, -3, 0, 0, 0, 0, 0, 25);
-translate([110,0])
-    badge_2char("ゆ", "う", 0, -3, 0, -3, 30);
-
-
-
+translate([0, 0])
+    badge_2char("は", "な", 0, 0, 0, 0, 30);
+translate([110, 74]) {
+    badge_3char("そ", "う", "た", -2, 1, 0, 1, 0, 1, 30);
+    badge_support(2, 2, 2);
+}
+translate([0, 74])
+    badge_2char("り", "な", 0, 0, 0, 0, 30);
+translate([110, 0])
+    badge_4char("り", "ゅ", "う", "た", 0, 0, 0, 0, 0, 0, 0, 0, 30);
 
 //
 // 以下、サブモジュール
@@ -159,10 +158,44 @@ module badge_3char(char1, char2, char3, offset_x1, offset_y1, offset_x2, offset_
     badge_body();
 }
 
+module badge_3char_support(char1, char2, char3, offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, fontsize, support){
+    badge_name_3char(char1, char2, char3, offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, fontsize);
+    badge_body();
+    badge_support(support);
+}
 
 module badge_2char(char1, char2, offset_x1, offset_y1, offset_x2, offset_y2, fontsize){
     badge_name_2char(char1, char2, offset_x1, offset_y1, offset_x2, offset_y2, fontsize);
     badge_body();
+}
+
+
+// 特殊なケースに緊急対応するためのアドホック格子部品
+// 1マスサイズの格子（縦 or 横）を追加する
+//
+// badge_support(ix, iy, direction) 
+//     ix, iy = 格子座標 where ix = 0,1,2,3,4, iy = 0,1,2 左下が (0,0)
+//     direction = 1 (縦) or 2 （横)
+//
+module badge_support(ix, iy, direction) {
+
+    translate([0, 0, -0.5])
+    minkowski() {
+        linear_extrude(height = 1, center = false, convexity = 10,
+                           twist = 0, slices = 20, scale = 1.0) {
+
+            if (direction == 1) {
+                translate([gap_x/2+ix*gap_x-thick/2, iy*gap_y, -0.5])
+                   square([thick, gap_y]);
+            }
+            if (direction == 2) {
+                translate([ix*gap_x, gap_y/2+iy*gap_y-thick/2, 0])
+                   square([gap_x, thick]);
+            }
+        }
+        sphere(r=0.5, $fn=8);
+    }      
+
 }
 
 module badge_body() {
@@ -263,6 +296,3 @@ module logo(w, h) {
             text(text = "P", font = "Consolas:style=Bold", halign = "center", valign="baseline", size = 4);
     }                      
 }                    
-
-
-
