@@ -11,7 +11,7 @@ gap_x = 20;  // 罫線の間隔(X)
 gap_y = 20;  // 罫線の間隔(Y)
 thick = 1;   // 罫線の太さ(mm)
 thick_outer = 5;     // 名札外周の太さ(mm)
-cx = width / gap_x;  // 罫線の本数(X)
+cx = width  / gap_x; // 罫線の本数(X)
 cy = height / gap_y; // 罫線の本数(Y)
 
 // 使い方
@@ -36,17 +36,28 @@ cy = height / gap_y; // 罫線の本数(Y)
 //     offset_yN = N文字目の位置のY方向補正値(mm)
 //         where N=1,2,3,4
 //     fontsize = フォントサイズ（推奨値：2文字版と3文字版は30, 4文字版は25）
+//
+//
+// 特殊なケースに緊急対応するためのアドホック格子部品：
+//   badge_support(ix, iy, direction) 
+//     where
+//       ix, iy = 格子座標 where ix = 0,1,2,3,4, iy = 0,1,2 ただし左下が (0,0)
+//       direction = 1 (縦) or 2（横)
+//      （1マスサイズの格子（縦 or 横）を追加する）
 
-translate([0, 0])
-    badge_2char("は", "な", 0, 0, 0, 0, 30);
-translate([110, 74]) {
-    badge_3char("そ", "う", "た", -2, 1, 0, 1, 0, 1, 30);
+
+// 3文字版：2文字目が「う」の場合に横線を追加する方法
+translate([0, 0]) {
+    badge_3char("こ", "う", "き", -2, 1, 0, 1, 0, 1, 30);
     badge_support(2, 2, 2);
 }
+translate([110, 74])
+    badge_2char("め", "い", 0, 0, 0, 0, 30);
 translate([0, 74])
-    badge_2char("り", "な", 0, 0, 0, 0, 30);
+    badge_3char("た", "く", "ほ", 0, 0, 0, 0, 0, 0, 30);
 translate([110, 0])
-    badge_4char("り", "ゅ", "う", "た", 0, 0, 0, 0, 0, 0, 0, 0, 30);
+    badge_4char("り", "ゅ", "う", "た", -3, 0, -3, 0, -2, 0, -2, 0, 30);
+
 
 //
 // 以下、サブモジュール
@@ -58,6 +69,11 @@ translate([110, 0])
 // offset_yN = N文字目の位置のY方向補正値(mm)
 //     where N=1,2,3,4
 // fontsize = フォントサイズ
+module badge_4char(char1, char2, char3, char4,  offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, offset_x4, offset_y4, fontsize){
+    badge_name_4char(char1, char2, char3, char4,  offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, offset_x4, offset_y4, fontsize);
+    badge_body();
+}
+
 module badge_name_4char(char1, char2, char3, char4,  offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, offset_x4, offset_y4, fontsize){
      x1 = width/2-35+offset_x1;
      x2 = width/2-10+offset_x2;
@@ -72,16 +88,16 @@ module badge_name_4char(char1, char2, char3, char4,  offset_x1, offset_y1, offse
         
         linear_extrude(height = 3, center = false, convexity = 10,
                            twist = 0, slices = 20, scale = 1.0) {
-            translate([x1, y1,0])
+            translate([x1, y1, 0])
             text(text = char1, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
            
-            translate([x2, y2,0])
+            translate([x2, y2, 0])
             text(text = char2, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
 
-            translate([x3, y3,0])
+            translate([x3, y3, 0])
             text(text = char3, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
 
-            translate([x4, y4,0])
+            translate([x4, y4, 0])
             text(text = char4, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
 
             }
@@ -95,6 +111,12 @@ module badge_name_4char(char1, char2, char3, char4,  offset_x1, offset_y1, offse
 // offset_yN = N文字目の位置のY方向補正値(mm)
 //     where N=1,2,3
 // fontsize = フォントサイズ
+module badge_3char(char1, char2, char3, offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, fontsize){
+    badge_name_3char(char1, char2, char3, offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, fontsize);
+    badge_body();
+}
+
+
 module badge_name_3char(char1, char2, char3, offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, fontsize){
      x1 = width/2-30+offset_x1;
      x2 = width/2   +offset_x2;
@@ -116,7 +138,7 @@ module badge_name_3char(char1, char2, char3, offset_x1, offset_y1, offset_x2, of
             translate([x3, y3, 0])
             text(text = char3, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
             }
-        sphere(r=1.0,$fn=8);
+        sphere(r=1.0, $fn=8);
     }
 }
 
@@ -126,6 +148,10 @@ module badge_name_3char(char1, char2, char3, offset_x1, offset_y1, offset_x2, of
 // offset_yN = N文字目の位置のY方向補正値(mm)
 //     where N=1,2
 // fontsize = フォントサイズ
+module badge_2char(char1, char2, offset_x1, offset_y1, offset_x2, offset_y2, fontsize){
+    badge_name_2char(char1, char2, offset_x1, offset_y1, offset_x2, offset_y2, fontsize);
+    badge_body();
+}
 
 module badge_name_2char(char1, char2, offset_x1, offset_y1, offset_x2, offset_y2, fontsize){
     x1 = width/2-20+offset_x1;
@@ -143,30 +169,8 @@ module badge_name_2char(char1, char2, offset_x1, offset_y1, offset_x2, offset_y2
                 text(text = char2, font = "IPAexゴシック", halign = "center", valign="center", size = fontsize);
 
             }
-        sphere(r=1.0,$fn=8);
+        sphere(r=1.0, $fn=8);
     }
-}
-
-
-module badge_4char(char1, char2, char3, char4,  offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, offset_x4, offset_y4, fontsize){
-    badge_name_4char(char1, char2, char3, char4,  offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, offset_x4, offset_y4, fontsize);
-    badge_body();
-}
-
-module badge_3char(char1, char2, char3, offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, fontsize){
-    badge_name_3char(char1, char2, char3, offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, fontsize);
-    badge_body();
-}
-
-module badge_3char_support(char1, char2, char3, offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, fontsize, support){
-    badge_name_3char(char1, char2, char3, offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, fontsize);
-    badge_body();
-    badge_support(support);
-}
-
-module badge_2char(char1, char2, offset_x1, offset_y1, offset_x2, offset_y2, fontsize){
-    badge_name_2char(char1, char2, offset_x1, offset_y1, offset_x2, offset_y2, fontsize);
-    badge_body();
 }
 
 
@@ -197,6 +201,11 @@ module badge_support(ix, iy, direction) {
     }      
 
 }
+
+
+//
+// 名札の本体
+//
 
 module badge_body() {
     // SIJPロゴ
@@ -296,3 +305,6 @@ module logo(w, h) {
             text(text = "P", font = "Consolas:style=Bold", halign = "center", valign="baseline", size = 4);
     }                      
 }                    
+
+
+
