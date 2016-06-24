@@ -5,285 +5,98 @@
 //  - Shapeways 285x150 (PLA)
 //
 
-width = 100; // 名札のサイズ(X)
-height = 60; // 名札のサイズ(Y)
-gap_x = 20;  // 罫線の間隔(X)
-gap_y = 20;  // 罫線の間隔(Y)
-thick = 1;   // 罫線の太さ(mm)
-thick_outer = 5;     // 名札外周の太さ(mm)
-cx = width / gap_x;  // 罫線の本数(X)
-cy = height / gap_y; // 罫線の本数(Y)
+width = 100;      // 名札のサイズ(X)
+height = 60;      // 名札のサイズ(Y)
+grid_width = 20;  // 罫線の間隔(X)
+grid_height = 20; // 罫線の間隔(Y)
+thick = 1;        // 罫線の太さ(mm)
+thick_outer = 5;  // 名札外周の太さ(mm)
+grid_cx = width / grid_width;   // 罫線の本数(X)
+grid_cy = height / grid_height; // 罫線の本数(Y)
 
 // 使い方
 //
-// 2文字版：
-//   badge_2char(char1, char2, 
-//               offset_x1, offset_y1, offset_x2, offset_y2, fontsize);
+// badge(name, [ offset1, offset_2, ....  ], fontsize_offset);
+//     名札を生成する。
 //
-// 3文字版：
-//   badge_3char(char1, char2, char3,
-//               offset_x1, offset_y1, offset_x2, offset_y2,
-//               offset_x3, offset_y3, fontsize);
+//   where
+//     name   = 名前の文字列
+//     offsetN = N文字目の位置の補正値
+//             = [ offset_x, offset_y ]
+//                 where 
+//                     offset_x = X方向補正値(mm)
+//                     offset_y = Y方向補正値(mm)
+//     fontsize_offset = フォントサイズ補正値(mm)
 //
-// 4文字版：
-//   badge_4char(char1, char2, char3, char4,
-//               offset_x1, offset_y1, offset_x2, offset_y2, 
-//               offset_x3, offset_y3, offset_x4, offset_y4, fontsize);
 //
-// 5文字版：
-//   badge_5char(char1, char2, char3, char4, char5,
-//               offset_x1, offset_y1, offset_x2, offset_y2, 
-//               offset_x3, offset_y3, offset_x4, offset_y4, 
-//               offset_x5, offset_y5,
-//               fontsize);
-//
-// 6文字版：
-//   badge_6char(char1, char2, char3, char4, char5, char6,
-//               offset_x1, offset_y1, offset_x2, offset_y2, 
-//               offset_x3, offset_y3, offset_x4, offset_y4, 
-//               offset_x5, offset_y5, offset_x6, offset_y6,
-//               fontsize);
-//
-// where
-//     charN   = N文字目の文字
-//     offset_xN = N文字目の位置のX方向補正値(mm)
-//     offset_yN = N文字目の位置のY方向補正値(mm)
-//         where N=1,2,3,4
-//     fontsize = フォントサイズ（推奨値：2文字版と3文字版は30, 4文字版は25）
-//
-// 特殊なケースに緊急対応するためのアドホック格子部品
-// 1マスサイズの格子（縦 or 横）を追加する
 // badge_support(ix, iy, direction) 
-//     ix, iy = 格子座標 where ix = 0,1,2,3,4, iy = 0,1,2 左下が (0,0)
+//     特殊なケースに緊急対応するためのアドホック格子部品。
+//     1マスサイズの格子（縦 or 横）を追加する。
+//
+//   where
+//     ix, iy = 格子座標
+//         where ix = 0,1,2,3,4, iy = 0,1,2 ただし左下が (0,0)
 //     direction = 1 (縦) or 2 （横)
 
-translate([0, 0])
-    badge_6char("り", "ゅ", "う", "た", "ろ", "う", 
-                 0, 2, 0, 2, 0, 2,
-                 0, 2, 0, 2, 0, 2, 18);
+translate([0, 0]) {
+    badge("わびこ", [ [ 0, 0 ], [ 0, 0 ], [ 0, 0 ], ], 0);
+}
+translate([110, 74]) {
+    badge("こうき", [ [ 0, 0 ], [ 0, 0 ], [ 0, 0 ], ], 0);
+    badge_support(2, 2, 2);    
+}
+translate([0, 74]) {
+    badge("りゅうたろう", [ [ 0, 0 ], [ 0, 0 ], [ 0, 0 ], [ 0, 0 ], [ 0, 0 ], [ 0, 0 ], ], 0);
+}
+translate([110, 0]) {
+    badge("まり", [ [ 0, 0 ], [ 0, 0 ], ], -10);
+}
 
-translate([110, 74])
-    badge_6char("よ", "う", "い", "ち", "ろ", "う", 
-                 2, 2, 0, 2, 0, 2,
-                 0, 2, 0, 2, 0, 2, 18);
 
-translate([0, 74])
-    badge_3char("た", "く", "み", -2, 0, -1, 0, 0, 0, 27);
-
-translate([110, 0])
-    badge_3char("は", "る", "か", -2, 0, -1, 0, 0, 0, 27);
 
 //
 // 以下、サブモジュール
 //
 
-// 名札6文字版
-// charN   = N文字目の文字
-// offset_xN = N文字目の位置のX方向補正値(mm)
-// offset_yN = N文字目の位置のY方向補正値(mm)
-//     where N=1,2,3,4,5,6
-// fontsize = フォントサイズ
-module badge_6char(char1, char2, char3, char4, char5, char6, offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, offset_x4, offset_y4, offset_x5, offset_y5, offset_x6, offset_y6, fontsize){
-    badge_name_6char(char1, char2, char3, char4, char5, char6, offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, offset_x4, offset_y4, offset_x5, offset_y5, offset_x6, offset_y6, fontsize);
+module badge(name, offsets, fontsize_offset) {
+
     badge_body();
-}
+    height_list = [3, 0.5];
+    pass = 0;
+    scaler = len(name)*len(name);
+    //for (pass = [0 : 1]) {
+        minkowski() {
+            linear_extrude(height = height_list[pass], center = false, convexity = 10,
+                               twist = 0, slices = 20, scale = 1.0) {
 
-module badge_name_6char(char1, char2, char3, char4, char5, char6, offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, offset_x4, offset_y4, offset_x5, offset_y5, offset_x6, offset_y6, fontsize){
-     x1 = width/2-43+offset_x1;
-     x2 = width/2-26+offset_x2;
-     x3 = width/2-9+offset_x3;
-     x4 = width/2+9+offset_x4;
-     x5 = width/2+26+offset_x5;
-     x6 = width/2+43+offset_x6;
-     y1 = height*0.3+offset_y1;
-     y2 = height*0.3+offset_y2;
-     y3 = height*0.3+offset_y3;
-     y4 = height*0.3+offset_y4;
-     y5 = height*0.3+offset_y5;
-     y6 = height*0.3+offset_y6;
-    
-     minkowski() {
-        
-        linear_extrude(height = 3, center = false, convexity = 10,
-                           twist = 0, slices = 20, scale = 1.0) {
-            translate([x1, y1, 0])
-            text(text = char1, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
-           
-            translate([x2, y2, 0])
-            text(text = char2, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
+                for (i = [0 : len(name)-1]) {
+                    namechar = name[i];
+                    offset = offsets[i];
+                    offset_x = offset[0];
+                    offset_y = offset[1];
+                    bboxsize = (width-thick_outer*4/scaler)/len(name);       
+                    fontsize = bboxsize*0.9 + fontsize_offset;
+                    pos_x = bboxsize/2 + i*bboxsize + thick_outer*4/scaler;
+                    pos_y = (height-bboxsize)/2 + bboxsize*0.2; // - thick_outer*4/scaler;
 
-            translate([x3, y3, 0])
-            text(text = char3, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
+                    echo(i=i, namechar=namechar, offset_x=offset_x,offset_y=offset_y, bboxsize=bboxsize, fontsize=fontsize, pos_x=pos_x, pos_y=pos_y);
 
-            translate([x4, y4, 0])
-            text(text = char4, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
+                    translate([pos_x+offset_x, pos_y+offset_y, 0])
+                        text(text = namechar, font = "IPAexゴシック",
+                             halign = "center", valign="baseline", size = fontsize);
 
-            translate([x5, y5, 0])
-            text(text = char5, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
-
-            translate([x6, y6, 0])
-            text(text = char6, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
+                }
             }
-        sphere(r=1.0, $fn=8);
-    }
+            //if (pass == 0) {
+                sphere(r = 1.0, $fn = 8);
+            //} else if (pass == 1) {
+            //    cube([3, 3, 0.1], center=true);
+            //}
+        }
+
+    //}
+
 }
-
-// 名札5文字版
-// charN   = N文字目の文字
-// offset_xN = N文字目の位置のX方向補正値(mm)
-// offset_yN = N文字目の位置のY方向補正値(mm)
-//     where N=1,2,3,4,5
-// fontsize = フォントサイズ
-
-module badge_5char(char1, char2, char3, char4, char5, offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, offset_x4, offset_y4, offset_x5, offset_y5, fontsize){
-    badge_name_5char(char1, char2, char3, char4, char5, offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, offset_x4, offset_y4, offset_x5, offset_y5, fontsize);
-    badge_body();
-}
-module badge_name_5char(char1, char2, char3, char4, char5, offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, offset_x4, offset_y4, offset_x5, offset_y5, fontsize){
-     x1 = width/2-40+offset_x1;
-     x2 = width/2-20+offset_x2;
-     x3 = width/2   +offset_x3;
-     x4 = width/2+20+offset_x4;
-     x5 = width/2+40+offset_x5;
-     y1 = height*0.3+offset_y1;
-     y2 = height*0.3+offset_y2;
-     y3 = height*0.3+offset_y3;
-     y4 = height*0.3+offset_y4;
-     y5 = height*0.3+offset_y5;
-    
-     minkowski() {
-        
-        linear_extrude(height = 3, center = false, convexity = 10,
-                           twist = 0, slices = 20, scale = 1.0) {
-            translate([x1, y1, 0])
-            text(text = char1, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
-           
-            translate([x2, y2, 0])
-            text(text = char2, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
-
-            translate([x3, y3, 0])
-            text(text = char3, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
-
-            translate([x4, y4, 0])
-            text(text = char4, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
-
-            translate([x5, y5, 0])
-            text(text = char5, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
-            }
-        sphere(r=1.0, $fn=8);
-    }
-}
-
-// 名札4文字版
-// charN   = N文字目の文字
-// offset_xN = N文字目の位置のX方向補正値(mm)
-// offset_yN = N文字目の位置のY方向補正値(mm)
-//     where N=1,2,3,4
-// fontsize = フォントサイズ
-module badge_4char(char1, char2, char3, char4,  offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, offset_x4, offset_y4, fontsize){
-    badge_name_4char(char1, char2, char3, char4,  offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, offset_x4, offset_y4, fontsize);
-    badge_body();
-}
-
-module badge_name_4char(char1, char2, char3, char4,  offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, offset_x4, offset_y4, fontsize){
-     x1 = width/2-35+offset_x1;
-     x2 = width/2-10+offset_x2;
-     x3 = width/2+10+offset_x3;
-     x4 = width/2+35+offset_x4;
-     y1 = height*0.3+offset_y1;
-     y2 = height*0.3+offset_y1;
-     y3 = height*0.3+offset_y1;
-     y4 = height*0.3+offset_y1;
-    
-     minkowski() {
-        
-        linear_extrude(height = 3, center = false, convexity = 10,
-                           twist = 0, slices = 20, scale = 1.0) {
-            translate([x1, y1,0])
-            text(text = char1, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
-           
-            translate([x2, y2,0])
-            text(text = char2, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
-
-            translate([x3, y3,0])
-            text(text = char3, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
-
-            translate([x4, y4,0])
-            text(text = char4, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
-
-            }
-        sphere(r=1.0,$fn=8);
-    }
-}
-
-// 名札3文字版
-// charN   = N文字目の文字
-// offset_xN = N文字目の位置のX方向補正値(mm)
-// offset_yN = N文字目の位置のY方向補正値(mm)
-//     where N=1,2,3
-// fontsize = フォントサイズ
-module badge_3char(char1, char2, char3, offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, fontsize){
-    badge_name_3char(char1, char2, char3, offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, fontsize);
-    badge_body();
-}
-
-module badge_name_3char(char1, char2, char3, offset_x1, offset_y1, offset_x2, offset_y2, offset_x3, offset_y3, fontsize){
-     x1 = width/2-30+offset_x1;
-     x2 = width/2   +offset_x2;
-     x3 = width/2+30+offset_x3;
-     y1 = height*0.3+offset_y1;
-     y2 = height*0.3+offset_y2;
-     y3 = height*0.3+offset_y3;
-    
-     minkowski() {
-        
-        linear_extrude(height = 3, center = false, convexity = 10,
-                           twist = 0, slices = 20, scale = 1.0) {
-            translate([x1, y1, 0])
-            text(text = char1, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
-           
-            translate([x2, y2, 0])
-            text(text = char2, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
-
-            translate([x3, y3, 0])
-            text(text = char3, font = "IPAexゴシック", halign = "center", valign="baseline", size = fontsize);
-            }
-        sphere(r=1.0,$fn=8);
-    }
-}
-
-// 名札2文字版
-// charN   = N文字目の文字
-// offset_xN = N文字目の位置のX方向補正値(mm)
-// offset_yN = N文字目の位置のY方向補正値(mm)
-//     where N=1,2
-// fontsize = フォントサイズ
-module badge_2char(char1, char2, offset_x1, offset_y1, offset_x2, offset_y2, fontsize){
-    badge_name_2char(char1, char2, offset_x1, offset_y1, offset_x2, offset_y2, fontsize);
-    badge_body();
-}
-
-module badge_name_2char(char1, char2, offset_x1, offset_y1, offset_x2, offset_y2, fontsize){
-    x1 = width/2-20+offset_x1;
-    y1 = height/2  +offset_y1;
-    x2 = width/2+20+offset_x1;
-    y2 = height/2  +offset_y2;
-    
-    minkowski() {
-        linear_extrude(height = 3, center = false, convexity = 10,
-                           twist = 0, slices = 20, scale = 1.0) {
-            translate([x1, y1, 0])
-                text(text = char1, font = "IPAexゴシック", halign = "center", valign="center", size = fontsize);
-           
-            translate([x2, y2, 0])
-                text(text = char2, font = "IPAexゴシック", halign = "center", valign="center", size = fontsize);
-
-            }
-        sphere(r=1.0,$fn=8);
-    }
-}
-
-
 
 
 // 特殊なケースに緊急対応するためのアドホック格子部品
@@ -301,12 +114,12 @@ module badge_support(ix, iy, direction) {
                            twist = 0, slices = 20, scale = 1.0) {
 
             if (direction == 1) {
-                translate([gap_x/2+ix*gap_x-thick/2, iy*gap_y, -0.5])
-                   square([thick, gap_y]);
+                translate([grid_width/2+ix*grid_width-thick/2, iy*grid_height, -0.5])
+                   square([thick, grid_height]);
             }
             if (direction == 2) {
-                translate([ix*gap_x, gap_y/2+iy*gap_y-thick/2, 0])
-                   square([gap_x, thick]);
+                translate([ix*grid_width, grid_height/2+iy*grid_height-thick/2, 0])
+                   square([grid_width, thick]);
             }
         }
         sphere(r=0.5, $fn=8);
@@ -314,6 +127,7 @@ module badge_support(ix, iy, direction) {
 
 }
 
+// 名札の背景本体
 module badge_body() {
     // SIJPロゴ
     translate([width-12, 2])
@@ -352,8 +166,8 @@ module badge_body() {
         linear_extrude(height = 1, center = false, convexity = 10,
                            twist = 0, slices = 20, scale = 1.0) {
 
-           for (ix = [1:cx-1]) {
-                translate([ix*gap_x-thick/2, 0, -0.5])
+           for (ix = [1:grid_cx-1]) {
+                translate([ix*grid_width-thick/2, 0, -0.5])
                    square([thick, height]);
            }
 
@@ -367,8 +181,8 @@ module badge_body() {
         linear_extrude(height = 1.0, center = false, convexity = 10,
                            twist = 0, slices = 20, scale = 1.0) {
 
-           for (iy = [1:cy-1]) {
-                translate([0, iy*gap_y-thick/2, 0])
+           for (iy = [1:grid_cy-1]) {
+                translate([0, iy*grid_height-thick/2, 0])
                    square([width, thick]);
            }
         }
@@ -378,12 +192,12 @@ module badge_body() {
 
 
 //
-// SIJP logo
+// SIJP ロゴ
 //
 module logo(w, h) {
     t = 1;
-    cx = w/2;
-    cy = h/2;
+    grid_cx = w/2;
+    grid_cy = h/2;
     px = 12;
     py = 12;
 
